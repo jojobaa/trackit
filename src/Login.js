@@ -1,16 +1,27 @@
 import { Link } from "react-router-dom";
 import styled from "styled-components";
+import track from "./img/track.png";
 export default function Login() {
     return (
         <LoginInputs>
+            <Header><img src={track} alt='' /></Header>
             <input type='text' placeholder="email"></input>
             <input type='text' placeholder="senha"></input>
-            <Link to="/cadastre"><button>Entrar</button></Link>
-            <p>Não tem uma conta? Cadastre-se!</p>
+            <button>Entrar</button>
+            <Link to="/cadastre"><p>Não tem uma conta? Cadastre-se!</p></Link>
         </LoginInputs>
     )
 }
 
+const Header = styled.div`
+display: flex;
+align-items: center;
+justify-content: center;
+img{
+    width: 180px;
+    height: 180px;
+}
+`
 const LoginInputs = styled.div`
 display: flex;
 flex-direction: column;

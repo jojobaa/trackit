@@ -1,18 +1,29 @@
 import styled from "styled-components";
 import { Link } from "react-router-dom";
+import track from "./img/track.png";
 
 export default function Cadastre() {
     return (
         <CadastreInputs>
+            <Header><img src={track} alt='' /></Header>
             <input type='text' placeholder="email"></input>
             <input type='text' placeholder="senha"></input>
             <input type='text' placeholder="nome"></input>
             <input type='text' placeholder="foto"></input>
-            <Link to="/"><button>Cadastrar</button></Link>
-            <p>Já tem uma conta? Faça login!</p>
+            <button>Cadastrar</button>
+            <Link to="/"><p>Já tem uma conta? Faça login!</p></Link>
         </CadastreInputs>
     )
 }
+const Header = styled.div`
+display: flex;
+align-items: center;
+justify-content: center;
+img{
+    width: 180px;
+    height: 180px;
+}
+`
 const CadastreInputs = styled.div`
 display: flex;
 flex-direction: column;
