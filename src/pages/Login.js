@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import styled from "styled-components";
-import track from "./img/track.png";
+import track from "../img/track.png";
 export default function Login() {
     return (
         <LoginInputs>

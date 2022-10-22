@@ -1,6 +1,6 @@
 import styled from "styled-components";
-import icon from "./img/icon.png";
-import trackit from "./img/trackit.png";
+import icon from "../img/icon.png";
+import trackit from "../img/trackit.png";
 
 export default function Header() {
     return (
@@ -20,7 +20,7 @@ justify-content: space-between;
 background-color: #126BA5;
 box-shadow: 1px 2px 4px rgba(0, 0, 0, .3);
 img{
-    margin-left: 5px;
-    margin-right: 5px;
+    margin-left: 10px;
+    margin-right: 10px;
 }
 `

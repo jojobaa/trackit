@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { Link } from "react-router-dom";
-import track from "./img/track.png";
+import track from "../img/track.png";
 
 export default function Cadastre() {
     return (

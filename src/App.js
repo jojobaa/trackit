@@ -1,6 +1,8 @@
-import Login from "./Login";
-import Cadastre from "./Cadastre";
-import Habits from "./Habits";
+import Login from "./pages/Login";
+import Cadastre from "./pages/Cadastre";
+import Habits from "./pages/Habits";
+import Today from "./pages/Today";
+import Historic from "./pages/Historic";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 export default function App() {
@@ -9,7 +11,9 @@ export default function App() {
             <Routes>
                 <Route path="/" element={<Login/>}/>
                 <Route path="/cadastre" element={<Cadastre/>}/> 
-                <Route path="/habits" element={<Habits/>}/>    
+                <Route path="/habits" element={<Habits/>}/>
+                <Route path="/today" element={<Today/>}/>       
+                <Route path="/historic" element={<Historic/>}/>  
             </Routes>
         </BrowserRouter>
     )
