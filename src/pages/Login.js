@@ -1,14 +1,67 @@
-import { Link } from "react-router-dom";
+import { useContext, useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import track from "../img/track.png";
+import ContextAPI from "./ContextAPI";
+import axios from "axios";
+
 export default function Login() {
+    const [email, setEmail] = useState("");
+    const [senha, setSenha] = useState("");
+    const [carregando, setCarregando] = useState(false);
+    const navigate = useNavigate();
+    const { setUsuario } = useContext(ContextAPI);
+
+    useEffect(() => {
+        const infoUser = localStorage.getItem("user info");
+        if (infoUser !== "[]") {
+            // navigate("/today");
+        }
+    });
+
+    function dadosUsuario(e) {
+        e.preventDefault();
+        setCarregando(true);
+
+        const promise = axios.post(
+            "https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/auth/login",
+            {
+                email: email,
+                password: senha,
+            }
+        );
+        promise.then((answer) => {
+            setUsuario(answer.data);
+            navigate("/today", {});
+        });
+
+        promise.catch((error) => {
+            alert(error.response.data.message);
+            setCarregando(false);
+        });
+    }
+
     return (
         <LoginInputs>
             <Header><img src={track} alt='' /></Header>
-            <input type='text' placeholder="email"></input>
-            <input type='text' placeholder="senha"></input>
-            <button>Entrar</button>
-            <Link to="/cadastre"><p>Não tem uma conta? Cadastre-se!</p></Link>
+            <form onSubmit={dadosUsuario}>
+                <input
+                    type={'text'}
+                    placeholder={"email"}
+                    onChange={(e) => setEmail(e.target.value)}
+                    disabled={carregando}
+                    color={"#DBDBDB"}>
+                </input>
+                <input
+                    type={'text'}
+                    placeholder={"senha"}
+                    onChange={(e) => setSenha(e.target.value)}
+                    disabled={carregando}>
+                </input>
+                <button text={"Entrar"} disabled={carregando}></button>
+                <Link to="/cadastre"><p>Já tem uma conta? Faça login!</p></Link>
+            </form>
+            
         </LoginInputs>
     )
 }
@@ -23,10 +76,13 @@ img{
 }
 `
 const LoginInputs = styled.div`
+form{
 display: flex;
 flex-direction: column;
 align-items: center;
 justify-content: center;
+}
+
 input{
     margin-top: 5px;
     border: none;

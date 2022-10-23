@@ -19,6 +19,9 @@ align-items: center;
 justify-content: space-between;
 background-color: #126BA5;
 box-shadow: 1px 2px 4px rgba(0, 0, 0, .3);
+position: fixed;
+top: 0;
+left: 0;
 img{
     margin-left: 10px;
     margin-right: 10px;

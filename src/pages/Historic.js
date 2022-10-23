@@ -18,6 +18,7 @@ const ContainerHistoric = styled.div`
 height: 100vh;
 margin: 0 auto;
 background-color: #F2F2F2;
+margin-top:100px;
 h1{
     margin-top: 30px;
     margin-left: 10px;

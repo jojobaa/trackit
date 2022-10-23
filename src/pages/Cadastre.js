@@ -1,17 +1,65 @@
 import styled from "styled-components";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import track from "../img/track.png";
+import { useState } from "react";
+import axios from "axios";
 
 export default function Cadastre() {
+    const [email, setEmail] = useState("");
+    const [senha, setSenha] = useState("");
+    const [nome, setNome] = useState("");
+    const [imagem, setImagem] = useState("");
+    const [carregando, setCarregando] = useState(false);
+    const navigate = useNavigate();
+
+    function dadosUsuarioCadastro(e) {
+        e.preventDefault();
+        setCarregando(true)
+        const promise = axios.post(
+            "https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/auth/sign-up",
+            {
+                email: email,
+                name: nome,
+                image: imagem,
+                password: senha
+            }
+        );
+
+        promise.then(() =>
+            navigate("/", {
+            })
+        );
+
+        promise.catch((error) => {
+            alert(error.response.data.message)
+            setCarregando(false)
+        })
+    }
+
     return (
         <CadastreInputs>
             <Header><img src={track} alt='' /></Header>
-            <input type='text' placeholder="email"></input>
-            <input type='text' placeholder="senha"></input>
-            <input type='text' placeholder="nome"></input>
-            <input type='text' placeholder="foto"></input>
-            <button>Cadastrar</button>
-            <Link to="/"><p>Já tem uma conta? Faça login!</p></Link>
+            <form onSubmit={dadosUsuarioCadastro}>
+                <input type={'text'}
+                    placeholder={"email"}
+                    onChange={(e) => setEmail(e.target.value)} disabled={carregando}
+                ></input>
+                <input type={'text'}
+                    placeholder={"senha"}
+                    onChange={(e) => setSenha(e.target.value)} disabled={carregando}
+                ></input>
+                <input type={'text'}
+                    placeholder={"nome"}
+                    onChange={(e) => setNome(e.target.value)} disabled={carregando}
+                ></input>
+                <input type={'text'}
+                    placeholder={"foto"}
+                    onChange={(e) => setImagem(e.target.value)} disabled={carregando}
+                ></input>
+                <button>Cadastrar</button>
+                <Link to="/"><p>Não tem uma conta? Cadastre-se!</p></Link>
+            </form>
+           
         </CadastreInputs>
     )
 }
@@ -25,10 +73,13 @@ img{
 }
 `
 const CadastreInputs = styled.div`
+form{
 display: flex;
 flex-direction: column;
 align-items: center;
 justify-content: center;
+}
+
 input{
     margin-top: 5px;
     border: none;

@@ -1,6 +1,7 @@
 // import { Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import styled from "styled-components";
-import Footer from "../components/Footer"
+import Footer from "../components/Footer";
 import Header from "../components/Header";
 
 export default function Today() {
@@ -30,10 +31,10 @@ const ContainerToday = styled.div`
 height: 100vh;
 margin: 0 auto;
 background-color: #F2F2F2;
+margin-top: 90px;
 `
 const Title = styled.div`
 margin-left: 10px;
-margin-top: 15px;
 h1{
     color: #126BA5;
     font-size: 22px;

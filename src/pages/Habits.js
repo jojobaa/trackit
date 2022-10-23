@@ -1,32 +1,109 @@
 // import { Link } from "react-router-dom";
+import { useContext, useState, useDays } from "react";
 import styled from "styled-components";
 import Footer from "../components/Footer"
 import Header from "../components/Header";
+import ContextAPI from "./ContextAPI";
+import axios from "axios";
 
 export default function Habits() {
+    const [carregando, setCarregando] = useState(false);
+    const { dia, setDia, arrayDia } = useDays();
+    const [criarHabito, setCriarHabito] = useState(false);
+    const [nomeHabito, setNomeHabito] = useState("");
+    const { usuario } = useContext(ContextAPI);
+
+    function clicou(day) {
+        dia[day].isClicked = true;
+        setDia({ ...dia });
+    }
+
+    function desclicou(day) {
+        dia[day].isClicked = false;
+        setDia({ ...dia });
+    }
+
+    function adiconaClicou(day) {
+        if (dia[day].isClicked === false) {
+            adiciona(day);
+        } else {
+            remove(day);
+        }
+    }
+
+    function dadosHabito(e) {
+        e.preventDefault();
+        setCarregando(true);
+
+        const escolherDia = arrayDia.filter((day) => dia[day].isClicked === true);
+
+        const diaId = [];
+        console.log(diaId);
+
+        for (let i = 0; i < escolherDia.length; i++) {
+            diaId.push(dia[escolherDia[i]].id);
+        }
+
+        const promise = axios.post(
+            "https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits",
+
+            {
+                name: nomeHabito,
+                days: diaId,
+            },
+            {
+                headers: { Authorization: "Bearer " + usuario.token }
+            }
+        );
+        promise.then((answer, dia) => {
+            setCarregando(false);
+            setCriarHabito(false);
+            setNomeHabito("")
+
+        });
+
+        promise.catch((error) => {
+            alert(error.response.data.message);
+            setCarregando(false);
+        });
+    }
+
+    function esconderHabito() {
+        setCriarHabito(false);
+    }
+
     return (
         <Background>
             <Header />
             <AddHabits>
                 <h2>Meus hábitos</h2>
-                <button>+</button>
+                <button onClick={() => setCriarHabito(!setCriarHabito)}>+</button>
             </AddHabits>
-            <HabitAdded>
-                <input type="text" placeholder="nome do hábito"></input>
-                <Week>
-                    <div>D</div>
-                    <div>S</div>
-                    <div>T</div>
-                    <div>Q</div>
-                    <div>Q</div>
-                    <div>S</div>
-                    <div>S</div>
-                </Week>
-                <Save>
-                    <div>Cancelar</div>
-                    <button>Salvar</button>
-                </Save>
-            </HabitAdded>
+            <form onSubmit={dadosHabito}>
+                <HabitAdded display={criarHabito ? "block" : "none"}>
+                    <input type={"text"}
+                        placeholder={"nome do hábito"}
+                        disabled={carregando}
+                        value={nomeHabito}
+                        onChange={(e) => setNomeHabito(e.target.value)}
+                    ></input>
+                    {arrayDia.map((day) => (
+                        <Week
+                            onClick={() => {
+                                clicou(dia);
+                            }}
+                            disabled={carregando}
+                            color={dia[day].isClicked ? "#ffffff" : "#d4d4d4"}
+                            backgroundcolor={dia[day].isClicked ? "#d4d4d4" : "#ffffff"}
+                            type="button">
+                            {dia[day].name}
+                        </Week>))}
+                    <Save>
+                        <div>Cancelar</div>
+                        <button>Salvar</button>
+                    </Save>
+                </HabitAdded>
+            </form>
             <p>Você não tem nenhum hábito cadastrado ainda. Adicione um hábito para começar a trackear!</p>
             <Footer />
         </Background>
@@ -36,6 +113,7 @@ const Background = styled.div`
 height: 100vh;
 margin: 0 auto;
 background-color: #F2F2F2;
+margin-top: 90px;
 p{
     margin-top: 20px;
     margin-right: 10px;
@@ -110,7 +188,7 @@ div{
     margin-right: 5px;
 }
 `
-const Save= styled.div`
+const Save = styled.div`
 display: flex;
 justify-content: center;
 align-items: center;
