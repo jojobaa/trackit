@@ -62,6 +62,19 @@ export default function Habits() {
             setCarregando(false);
             setCriarHabito(false);
             setNomeHabito("")
+            arrayDia.forEach((day) => {
+                dia[day].isClicked = false
+            })
+            const promise2 = axios.get(
+                "https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits",
+                {
+                    headers: { Authorization: "Bearer " + usuario.token },
+                }
+            );
+
+            promise2.then((answer) => {
+                setHabito(answer.data);
+            });
 
         });
 
@@ -88,92 +101,103 @@ export default function Habits() {
         });
     });
 
-    useEffect(() => {
-        const promise3 = axios.delete(
-            `https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/{${habito.id}}`,
-            {
-                headers: { Authorization: "Bearer " + usuario.token },
-            }
-        );
+    function excluirHabito(idHabito) {
 
-    }, []);
+        const confirmar = "Você realmente gostaria de apagar o hábito?";
+        if (window.confirm(confirmar) === true) {
+            const promise3 = axios.delete(
+                `https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/${idHabito.id}`,
+                {
+                    headers: { Authorization: "Bearer " + usuario.token },
+                }
+            );
 
-    function excluirHabito() {
-
-        const infoExcluir = "Você realmente gostaria de apagar o hábito?";
-        if (window.confirm(infoExcluir) === true) {
-
+            const promise4 = axios.get(
+                "https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits",
+                {
+                    headers: { Authorization: "Bearer " + usuario.token },
+                }
+            );
+            promise4.then((answer) => {
+                setHabito(answer.data);
+            });
         }
     }
 
     return (
-        <Background>
-            <Header />
-            <AddHabits>
-                <h2>Meus hábitos</h2>
-                <button onClick={() => setCriarHabito(!setCriarHabito)}>+</button>
-            </AddHabits>
-            <form onSubmit={dadosHabito}>
-                <HabitAdded display={criarHabito ? "block" : "none"}>
-                    <input type={"text"}
-                        placeholder={"nome do hábito"}
-                        disabled={carregando}
-                        value={nomeHabito}
-                        onChange={(e) => setNomeHabito(e.target.value)}
-                    ></input>
-                    {arrayDia.map((dia) => (
-                        <Week
-                            onClick={() => {
-                                adiconaClicou(dia);
-                            }}
+        <ContainerHabitoPage>
+            <Background>
+                <Header />
+                <AddHabits>
+                    <h2>Meus hábitos</h2>
+                    <button onClick={() => setCriarHabito(!criarHabito)}>+</button>
+                </AddHabits>
+                <form onSubmit={dadosHabito}>
+                    <HabitAdded display={criarHabito ? "block" : "none"}>
+                        <Input type={"text"}
+                            placeholder={"nome do hábito"}
                             disabled={carregando}
-                            color={dia[dia].isClicked ? "#ffffff" : "#d4d4d4"}
-                            backgroundcolor={dia[dia].isClicked ? "#d4d4d4" : "#ffffff"}
-                            type="button">
-                            {dia[dia].name}
-                        </Week>))}
-                    <Save>
-                        <div
-                            onClick={esconderHabito}
-                            backgroundcolor="#FFFFFF"
-                            color="#52B6FF"
-                            marginright="17px"
-                            disabled={carregando}
-                            type="button">Cancelar</div>
-                        <button
-                            backgroundcolor="#52B6FF"
-                            color="#FFFFFF"
-                            disabled={carregando}>
-                            {carregando ? <img src={carregar} alt="" /> : "Salvar"}
-                        </button>
-                    </Save>
-                </HabitAdded>
-            </form>
-            <p>"Você não tem nenhum hábito cadastrado ainda. Adicione um hábito para começar a trackear!"</p>
-            {habito.map((habitos) => (
-                <ContainerHabito>
-                    <NomeHabito>
-                        {habitos.name}
-                        <TrashCanIconStyle>
-                            <ion-icon name="trash-outline" onClick={excluirHabito}></ion-icon>
-                        </TrashCanIconStyle>
-                    </NomeHabito>
-                    <Dias>
-                        {arrayDia.map((day) => (
-                            <Dia>{dia[day].name}</Dia>
-                        ))}
-                    </Dias>
-                </ContainerHabito>
-            ))}
-            <Footer />
-        </Background>
+                            value={nomeHabito}
+                            onChange={(e) => setNomeHabito(e.target.value)}
+                        ></Input>
+                        <ContainerWeek>
+                            {arrayDia.map((day) => (
+                                <Week
+                                    onClick={() => {
+                                        adiconaClicou(day);
+                                    }}
+                                    disabled={carregando}
+                                    color={dia[day].isClicked ? "#ffffff" : "#d4d4d4"}
+                                    backgroundcolor={dia[day].isClicked ? "#d4d4d4" : "#ffffff"}
+                                    type="button">
+                                    {dia[day].name}
+                                </Week>))}
+                        </ContainerWeek>
+                        <Save>
+                            <Cancelar
+                                onClick={esconderHabito}
+                                backgroundcolor="#FFFFFF"
+                                color="#52B6FF"
+                                marginright="17px"
+                                disabled={carregando}
+                                type="button">Cancelar</Cancelar>
+                            <Salvar
+                                backgroundcolor="#52B6FF"
+                                color="#FFFFFF"
+                                disabled={carregando}>
+                                {carregando ? <img src={carregar} alt="" /> : "Salvar"}
+                            </Salvar>
+                        </Save>
+                    </HabitAdded>
+                </form>
+                <p>{habito.length === 0 ? "Você não tem nenhum hábito cadastrado ainda. Adicione um hábito para começar a trackear!" :
+                    ""}</p>
+                {habito.map((habitos) => (
+                    <ContainerHabito>
+                        <NomeHabito>
+                            {habitos.name}
+                            <TrashCanIconStyle>
+                                <ion-icon name="trash-outline" onClick={() => excluirHabito(habitos.id)}></ion-icon>
+                            </TrashCanIconStyle>
+                        </NomeHabito>
+                        <Dias>
+                            {arrayDia.map((day) => (
+                                <Dia>{dia[day].name}</Dia>
+                            ))}
+                        </Dias>
+                    </ContainerHabito>
+                ))}
+                <Footer />
+            </Background>
+        </ContainerHabitoPage>
     )
 }
-const Background = styled.div`
+
+const ContainerHabitoPage = styled.div`
 height: 100vh;
 margin: 0 auto;
 background-color: #F2F2F2;
-margin-top: 90px;
+margin-top: 60px;
 p{
     margin-top: 20px;
     margin-right: 10px;
@@ -183,6 +207,12 @@ p{
     font-family: 'Lexend Deca', sans-serif;
 }
 `
+const Background = styled.div`
+/* height: 100vh;
+margin: 0 auto;
+background-color: #F2F2F2;
+margin-top: 90px; */
+`
 const AddHabits = styled.div`
 display: flex;
 align-items: center;
@@ -190,6 +220,7 @@ justify-content: space-between;
 margin-top: 30px;
 margin-right: 10px;
 margin-left: 10px;
+padding-top: 40px;
 h2{
     font-family: 'Lexend Deca', sans-serif;
     font-size: 20px;
@@ -207,23 +238,16 @@ button{
 }
 `
 const HabitAdded = styled.div`
-display: flex;
-justify-content: center;
-align-items: center;
-flex-direction: column;
-margin-top: 15px;
-margin-left: 12px;
-width: 340px;
-height: 180px;
-background-color: #FFFFFF;
-display: ${(props) => props.display};
-input{
-   width: 303px;
-   height: 45px;
-   border: none;
-   border: 1px solid #D4D4D4;
-   border-radius: 5px;
-}
+  width: 93vw;
+  height: 180px;
+  border-radius: 5px;
+  background-color: #ffffff;
+  margin: 20px auto auto auto;
+  padding-top: 18px;
+  display: ${(props) => props.display};
+  input {
+    width: 83vw;
+  }
 input::placeholder{
     font-family: 'Lexend Deca', sans-serif;
     font-size: 18px;
@@ -231,23 +255,36 @@ input::placeholder{
     font-weight: normal;
 }
 `
+const Input = styled.input`
+padding:5px;
+width: 70%;
+height: 45px; 
+border: none;
+border: 1px solid #D4D4D4;
+border-radius: 5px;
+`
+const ContainerWeek = styled.div`
+  width: 83vw;
+  margin: auto;
+  display: flex;
+  justify-content: space-between;
+`
+
 const Week = styled.div`
 display: flex;
-margin-top: 10px;
-div{
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 30px;
-    height: 30px;
-    border: 1px solid #D4D4D4;
-    font-family: 'Lexend Deca', sans-serif;
-    color:  ${(props) => props.color};
-    background-color: ${(props) => props.backgroundcolor};
-    font-size: 18px;
-    border-radius: 5px;
-    margin-right: 5px;
-}
+align-items: center;
+justify-content: center;
+width: 30px;
+height: 30px;
+border: 1px solid #D4D4D4;
+font-family: 'Lexend Deca', sans-serif;
+color:  ${(props) => props.color};
+background-color: ${(props) => props.backgroundcolor};
+font-size: 18px;
+border-radius: 5px;
+margin-right: 5px;
+margin-top:10px;
+
 `
 const Save = styled.div`
 display: flex;
@@ -255,24 +292,25 @@ justify-content: center;
 align-items: center;
 margin-top: 20px;
 padding-left: 120px;
-div{
-    font-family: 'Lexend Deca', sans-serif;
-    font-size: 15px;
-    color: #52B6FF;
-    padding-right:15px;
-}
-button{
-    width: 84px;
-    height: 35px;
-    font-family: 'Lexend Deca', sans-serif;
-    font-size: 15px;
-    color:  ${(props) => props.color};
-    background-color:  ${(props) => props.backgroundcolor};
-    border: none;
-    border-radius: 5px;
-    margin-right:  ${(props) => props.marginright};
-}
 `
+const Cancelar = styled.div`
+font-family: 'Lexend Deca', sans-serif;
+font-size: 15px;
+color: #52B6FF;
+padding-right:15px;
+`
+const Salvar = styled.button`
+width: 84px;
+height: 35px;
+font-family: 'Lexend Deca', sans-serif;
+font-size: 15px;
+color:${(props) => props.color};
+background-color:${(props) => props.backgroundcolor};
+border: none;
+border-radius: 5px;
+margin-right:${(props) => props.marginright};
+`
+
 const ContainerHabito = styled.div`
   width: 93vw;
   height: 91px;
