@@ -1,14 +1,17 @@
 import styled from "styled-components";
 import { CircularProgressbarWithChildren, buildStyles } from 'react-circular-progressbar';
 import { Link } from "react-router-dom";
+import ContextPercentual from "../pages/ContextPercentual";
+import { useContext } from "react";
 
 export default function Footer() {
+    const {percentual} = useContext(ContextPercentual)
     return (
         <FooterHabits>
             <Link to="/habits"><h3>Hábitos</h3></Link>
             <Containercircular>
                 <CircularProgressbarWithChildren
-                    value={75}
+                    value={percentual}
                     background
                     backgroundPadding={6}
                     styles={buildStyles({
