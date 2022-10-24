@@ -58,8 +58,7 @@ export default function Cadastre() {
                 ></input>
                 <button>Cadastrar</button>
                 <Link to="/"><p>Não tem uma conta? Cadastre-se!</p></Link>
-            </form>
-           
+            </form>  
         </CadastreInputs>
     )
 }
@@ -73,13 +72,17 @@ img{
 }
 `
 const CadastreInputs = styled.div`
+display: flex;
+align-items: center;
+justify-content: center;
+flex-direction: column;
+height: 86vh;
 form{
 display: flex;
 flex-direction: column;
 align-items: center;
 justify-content: center;
 }
-
 input{
     margin-top: 5px;
     border: none;
@@ -105,6 +108,7 @@ button{
     border-radius: 5px;
 }
 p{
+    padding-top: 20px;
     font-family: 'Lexend Deca', sans-serif;
     font-size: 14px;
     color: #52B6FF;

@@ -2,7 +2,7 @@ import { createContext, useState } from "react"
 
 const ContextPercentual = createContext()
 
-export function PercentageProvider({children}){
+export function ContextProvider({children}){
 
     const [percentual, setPercentual] = useState(0)
     return (

@@ -106,7 +106,7 @@ export default function Habits() {
         const confirmar = "Você realmente gostaria de apagar o hábito?";
         if (window.confirm(confirmar) === true) {
             const promise3 = axios.delete(
-                `https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/${idHabito.id}`,
+                `https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/${idHabito}`,
                 {
                     headers: { Authorization: "Bearer " + usuario.token },
                 }
@@ -182,7 +182,9 @@ export default function Habits() {
                         </NomeHabito>
                         <Dias>
                             {arrayDia.map((day) => (
-                                <Dia>{dia[day].name}</Dia>
+                                <Dia backgroundcolor={habitos.days.includes(dia[day].id) ? "#CFCFCF" : "#FFFFFF"}
+                                    color={habitos.days.includes(dia[day].id) ? "#FFFFFF" : "#CFCFCF"}>{dia[day].name}
+                                </Dia>
                             ))}
                         </Dias>
                     </ContainerHabito>
@@ -256,12 +258,12 @@ input::placeholder{
 }
 `
 const Input = styled.input`
-padding:5px;
-width: 70%;
+width: 303px;
 height: 45px; 
 border: none;
 border: 1px solid #D4D4D4;
 border-radius: 5px;
+margin-left:13px;
 `
 const ContainerWeek = styled.div`
   width: 83vw;
@@ -309,6 +311,9 @@ background-color:${(props) => props.backgroundcolor};
 border: none;
 border-radius: 5px;
 margin-right:${(props) => props.marginright};
+img{
+    height: 35px;
+}
 `
 
 const ContainerHabito = styled.div`
@@ -346,7 +351,7 @@ const Dia = styled.div`
   border: solid 1px #d4d4d4;
   border-radius: 5px;
   background-color: ${(props) => props.backgroundcolor};
-  color: #d4d4d4;
+  color: ${(props) => props.color};
   font-family: "Lexend Deca";
   font-weight: 400;
   font-size: 19.98px;

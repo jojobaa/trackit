@@ -15,6 +15,7 @@ export default function Today() {
     const [habitoHoje, setHabitosHoje] = useState([]);
     const [habitosCompletados, sethabitosCompletos] = useState(0)
     setPercentual(parseInt((habitosCompletados / habitoHoje.length) * 100));
+    console.log(habitoHoje)
 
     useEffect(() => {
         const promise1 = axios.get(
@@ -37,7 +38,7 @@ export default function Today() {
     }, []);
 
     function checkHabito(habitoDeHoje) {
-
+        console.log(habitoDeHoje);
         if (habitoDeHoje.done === false) {
             const promise2 = axios.post(
                 `https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/${habitoDeHoje.id}/check`,
@@ -77,27 +78,35 @@ export default function Today() {
         <ContainerToday>
             <Header />
             <Title>
-                <h1> text={`${dayjs().locale("pt-br").format("dddd")}, ${dayjs().format(
+                <h1>{`${dayjs().locale("pt-br").format("dddd")}, ${dayjs().format(
                     "DD/MM"
                 )}`}</h1>
-                <p>color={percentual !== 0 && habitoHoje.length > 0 ? "#8FC549" : "#BABABA"} text={percentual !== 0 && habitoHoje.length > 0 ? `${percentual}% dos hábitos concluídos` : "Nenhum hábito concluído ainda"} </p>
+                <StyledSubtitle color={percentual !== 0 && habitoHoje.length > 0 ? "#8FC549" : "#BABABA"}>
+                    {percentual !== 0 && habitoHoje.length > 0 ? `${percentual}% dos hábitos concluídos` : "Nenhum hábito concluído ainda"}
+                </StyledSubtitle>
             </Title>
             <CardHabit>
                 {habitoHoje.map((habito) => (
-                    <InfoHabitToday>
-                        <h2>{habito.name}</h2>
-                        <p>Sequência atual:<StyleP color={habito.done ? "#8FC549" : "#666666"}>{habito.currentSequence} dia(s)</StyleP></p>
-                        <p>Seu recorde:<StyleP color={habito.done && habito.currentSequence === habito.highestSequence ? "#8FC549" : "#666666"}>{habito.highestSequence} dia(s)</StyleP></p>
-                    </InfoHabitToday>
+                    <ContainerHabito>
+                        <InfoHabitToday>
+                            <h2>{habito.name}</h2>
+                            <StyleP>Sequência atual: <p color={habito.done ? "#8FC549" : "#666666"}>
+                                {habito.currentSequence} dia(s)</p>
+                            </StyleP>
+                            <StyleP>Seu recorde: <p color={habito.done && habito.currentSequence === habito.highestSequence ? "#8FC549" : "#666666"}>
+                                {habito.highestSequence} dia(s)</p>
+                            </StyleP>
+                        </InfoHabitToday>
+                        <CheckHabitToday
+                            onClick={() => checkHabito(habito)}
+                            backgroundcolor={habito.done ? "#8FC549" : "#EBEBEB"}>
+                            <ion-icon name="checkmark-outline"></ion-icon>
+                        </CheckHabitToday>
+                    </ContainerHabito>
                 ))}
-                <CheckHabitToday
-                    onClick={() => checkHabito(habitoHoje)}
-                    backgroundcolor={habitoHoje.done ? "#8FC549" : "#EBEBEB"}>
-                    <ion-icon name="checkmark-outline"></ion-icon>
-                </CheckHabitToday>
             </CardHabit>
             <Footer />
-        </ContainerToday>
+        </ContainerToday >
     )
 }
 
@@ -105,21 +114,25 @@ const ContainerToday = styled.div`
 height: 100vh;
 margin: 0 auto;
 background-color: #F2F2F2;
-margin-top: 90px;
+margin-top: 60px;
+`
+const ContainerHabito = styled.div`
+
 `
 const Title = styled.div`
 margin-left: 10px;
+padding-top: 40px;
 h1{
     color: #126BA5;
     font-size: 22px;
     font-family: 'Lexend Deca', sans-serif;
 }
-p{
-    margin-top: 5px;
-    color: #BABABA;
-    font-size: 17px;
-    font-family: 'Lexend Deca', sans-serif;
-}
+`
+const StyledSubtitle = styled.div`
+margin-top: 5px;
+color: ${(props) => props.color};
+font-size: 17px;
+font-family: 'Lexend Deca', sans-serif;
 `
 const CardHabit = styled.div`
 display: flex;
@@ -133,14 +146,13 @@ margin-left: 15px;
 `
 const InfoHabitToday = styled.div`
 background-color: #FFFFFF;
-h2{
+  h2{
     color: #666666;
     font-size: 20px;
     font-family: 'Lexend Deca', sans-serif;
     margin-bottom: 10px;
 }
 p{
-    color: #666666;
     font-size: 15px;
     font-family: 'Lexend Deca', sans-serif;
 }
@@ -156,11 +168,16 @@ color: #FFFFFF;
 font-size: 50px;
 background-color: ${(props) => props.backgroundcolor};
 `
-const StyleP = styled.p`
+const StyleP = styled.div`
+display: flex;
+p{
+  background-color: ${(props) => props.backgroundcolor};
   font-family: "Lexend Deca";
   font-size: 13px;
   font-weight: 400;
   line-height: 16px;
   margin-left:4px;
   color: ${(props) => props.color};
+}
+
 `;

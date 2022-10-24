@@ -44,24 +44,25 @@ export default function Login() {
     return (
         <LoginInputs>
             <Header><img src={track} alt='' /></Header>
-            <form onSubmit={dadosUsuario}>
-                <input
-                    type={'text'}
-                    placeholder={"email"}
-                    onChange={(e) => setEmail(e.target.value)}
-                    disabled={carregando}
-                    color={"#DBDBDB"}>
-                </input>
-                <input
-                    type={'text'}
-                    placeholder={"senha"}
-                    onChange={(e) => setSenha(e.target.value)}
-                    disabled={carregando}>
-                </input>
-                <button text={"Entrar"} disabled={carregando}></button>
-                <Link to="/cadastre"><p>Já tem uma conta? Faça login!</p></Link>
-            </form>
-            
+            <FormContainer>
+                <form onSubmit={dadosUsuario}>
+                    <input
+                        type={'text'}
+                        placeholder={"email"}
+                        onChange={(e) => setEmail(e.target.value)}
+                        disabled={carregando}
+                        color={"#DBDBDB"}>
+                    </input>
+                    <input
+                        type={'text'}
+                        placeholder={"senha"}
+                        onChange={(e) => setSenha(e.target.value)}
+                        disabled={carregando}>
+                    </input>
+                    <Link to="/habits"><button text={"Entrar"} disabled={carregando}>Entrar</button></Link>
+                    <Link to="/cadastre"><p>Já tem uma conta? Faça login!</p></Link>
+                </form>
+            </FormContainer>
         </LoginInputs>
     )
 }
@@ -76,25 +77,16 @@ img{
 }
 `
 const LoginInputs = styled.div`
+display: flex;
+align-items: center;
+justify-content: center;
+flex-direction: column;
+height: 70vh;
 form{
 display: flex;
 flex-direction: column;
 align-items: center;
 justify-content: center;
-}
-
-input{
-    margin-top: 5px;
-    border: none;
-    border: 1px solid #D4D4D4;
-    border-radius: 5px;
-    width: 303px;
-    height: 45px;
-}
-input::placeholder{
-    color: #D4D4D4;
-    font-family: 'Lexend Deca', sans-serif;
-    font-size: 20px;
 }
 button{
     width: 303px;
@@ -112,5 +104,21 @@ p{
     font-size: 14px;
     color: #52B6FF;
     text-decoration:underline;
+    padding-top: 20px;
+}
+`
+const FormContainer = styled.div`
+input{
+    margin-top: 5px;
+    border: none;
+    border: 1px solid #D4D4D4;
+    border-radius: 5px;
+    width: 303px;
+    height: 45px;
+}
+input::placeholder{
+    color: #D4D4D4;
+    font-family: 'Lexend Deca', sans-serif;
+    font-size: 20px;
 }
 `
