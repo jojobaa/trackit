@@ -1,5 +1,4 @@
 import styled from "styled-components";
-// import icon from "../img/icon.png";
 import trackit from "../img/trackit.png";
 import { useContext } from "react"
 import ContextAPI from "../pages/ContextAPI"
@@ -19,7 +18,8 @@ export default function Header() {
 }
 
 const HeaderHabits = styled.div`
-width: 375px;
+margin: 0 auto;
+width: 100%;
 height: 70px;
 display: flex;
 align-items: center;

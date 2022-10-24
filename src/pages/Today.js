@@ -90,10 +90,10 @@ export default function Today() {
                     <ContainerHabito data-identifier="today-infos">
                         <InfoHabitToday>
                             <h2>{habito.name}</h2>
-                            <StyleP>Sequência atual: <p color={habito.done ? "#8FC549" : "#666666"}> {habito.currentSequence} dia</p>
+                            <StyleP color={habito.done ? "#8FC549" : "#666666"}>Sequência atual: <p> {habito.currentSequence} dias</p>
                             </StyleP>
-                            <StyleP>Seu recorde: <p color={habito.done && habito.currentSequence === habito.highestSequence ? "#8FC549" : "#666666"}>
-                                {habito.highestSequence} dia</p>
+                            <StyleP color={habito.done && habito.currentSequence === habito.highestSequence ? "#8FC549" : "#666666"}>Seu recorde: <p>
+                                {habito.highestSequence} dias</p>
                             </StyleP>
                         </InfoHabitToday>
                         <CheckHabitToday
@@ -155,6 +155,8 @@ margin-top: 10px;
 const InfoHabitToday = styled.div`
 background-color: #FFFFFF;
   h2{
+    width: 220px;
+    height: auto;
     color: #666666;
     font-size: 20px;
     font-family: 'Lexend Deca', sans-serif;
@@ -177,6 +179,9 @@ font-size: 50px;
 background-color: ${(props) => props.backgroundcolor};
 `
 const StyleP = styled.div`
+p{
+    color: ${(props) => props.color};
+}
 display: flex;
 background-color: ${(props) => props.backgroundcolor};
 font-family: "Lexend Deca";
@@ -184,5 +189,4 @@ font-size: 13px;
 font-weight: 400;
 line-height: 16px;
 margin-left:4px;
-color: ${(props) => props.color};
 `;

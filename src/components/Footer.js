@@ -31,7 +31,8 @@ const FooterHabits = styled.div`
 *{
     text-decoration: none;
 }
-width: 375px;
+margin: 0 auto;
+width: 100%;
 height: 70px;
 display: flex;
 align-items: center;

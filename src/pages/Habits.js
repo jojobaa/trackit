@@ -205,6 +205,7 @@ height: 100vh;
 margin: 0 auto;
 background-color: #F2F2F2;
 margin-top: 60px;
+margin-bottom: 20px;
 p{
     margin-top: 20px;
     margin-right: 10px;

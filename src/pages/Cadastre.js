@@ -15,7 +15,7 @@ export default function Cadastre() {
     function dadosUsuarioCadastro(e) {
         e.preventDefault();
         setCarregando(true)
-        const promise = axios.post(
+        const promise1 = axios.post(
             "https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/auth/sign-up",
             {
                 email: email,
@@ -25,12 +25,12 @@ export default function Cadastre() {
             }
         );
 
-        promise.then(() =>
+        promise1.then(() =>
             navigate("/", {
             })
         );
 
-        promise.catch((error) => {
+        promise1.catch((error) => {
             alert(error.response.data.message)
             setCarregando(false)
         })

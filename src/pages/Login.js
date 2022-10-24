@@ -10,12 +10,12 @@ export default function Login() {
     const [senha, setSenha] = useState("");
     const [carregando, setCarregando] = useState(false);
     const navigate = useNavigate();
-    const { setUsuario } = useContext(ContextAPI);
+    const { setUsuario, usuario } = useContext(ContextAPI);
 
     useEffect(() => {
-        const infoUser = localStorage.getItem("user info");
-        if (infoUser !== "[]") {
-            // navigate("/today");
+        const localData = usuario;
+        if (Object.keys(localData).length !== 0) {
+            navigate("/today");
         }
     });
 
@@ -23,19 +23,19 @@ export default function Login() {
         e.preventDefault();
         setCarregando(true);
 
-        const promise = axios.post(
+        const promise1 = axios.post(
             "https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/auth/login",
             {
                 email: email,
                 password: senha,
             }
         );
-        promise.then((answer) => {
+        promise1.then((answer) => {
             setUsuario(answer.data);
             navigate("/today", {});
         });
 
-        promise.catch((error) => {
+        promise1.catch((error) => {
             alert(error.response.data.message);
             setCarregando(false);
         });
@@ -61,7 +61,7 @@ export default function Login() {
                         onChange={(e) => setSenha(e.target.value)}
                         disabled={carregando}>
                     </input>
-                    <Link to="/habits"><button data-identifier="login-btn" text={"Entrar"} disabled={carregando}>Entrar</button></Link>
+                    <button data-identifier="login-btn" text={"Entrar"} disabled={carregando}>Entrar</button>
                     <Link to="/cadastre"><p data-identifier="sign-up-action">Não tem uma conta? Cadastre-se!</p></Link>
                 </form>
             </FormContainer>
