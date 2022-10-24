@@ -40,25 +40,33 @@ export default function Cadastre() {
         <CadastreInputs>
             <Header><img src={track} alt='' /></Header>
             <form onSubmit={dadosUsuarioCadastro}>
-                <input type={'text'}
+                <input
+                    data-identifier="input-email"
+                    type={'text'}
                     placeholder={"email"}
                     onChange={(e) => setEmail(e.target.value)} disabled={carregando}
                 ></input>
-                <input type={'text'}
+                <input
+                    data-identifier="input-password"
+                    type={'text'}
                     placeholder={"senha"}
                     onChange={(e) => setSenha(e.target.value)} disabled={carregando}
                 ></input>
-                <input type={'text'}
+                <input
+                    data-identifier="input-name"
+                    type={'text'}
                     placeholder={"nome"}
                     onChange={(e) => setNome(e.target.value)} disabled={carregando}
                 ></input>
-                <input type={'text'}
+                <input
+                    data-identifier="input-photo"
+                    type={'text'}
                     placeholder={"foto"}
                     onChange={(e) => setImagem(e.target.value)} disabled={carregando}
                 ></input>
                 <button>Cadastrar</button>
-                <Link to="/"><p>Não tem uma conta? Cadastre-se!</p></Link>
-            </form>  
+                <Link to="/"><p data-identifier="back-to-login-action">Já tem uma conta? Faça login!</p></Link>
+            </form>
         </CadastreInputs>
     )
 }

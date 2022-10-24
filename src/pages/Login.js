@@ -47,6 +47,7 @@ export default function Login() {
             <FormContainer>
                 <form onSubmit={dadosUsuario}>
                     <input
+                        data-identifier="input-email"
                         type={'text'}
                         placeholder={"email"}
                         onChange={(e) => setEmail(e.target.value)}
@@ -54,13 +55,14 @@ export default function Login() {
                         color={"#DBDBDB"}>
                     </input>
                     <input
+                        data-identifier="input-password"
                         type={'text'}
                         placeholder={"senha"}
                         onChange={(e) => setSenha(e.target.value)}
                         disabled={carregando}>
                     </input>
-                    <Link to="/habits"><button text={"Entrar"} disabled={carregando}>Entrar</button></Link>
-                    <Link to="/cadastre"><p>Já tem uma conta? Faça login!</p></Link>
+                    <Link to="/habits"><button data-identifier="login-btn" text={"Entrar"} disabled={carregando}>Entrar</button></Link>
+                    <Link to="/cadastre"><p data-identifier="sign-up-action">Não tem uma conta? Cadastre-se!</p></Link>
                 </form>
             </FormContainer>
         </LoginInputs>

@@ -8,7 +8,7 @@ export default function Footer() {
     const {percentual} = useContext(ContextPercentual)
     return (
         <FooterHabits>
-            <Link to="/habits"><h3>Hábitos</h3></Link>
+            <Link to="/habits"><h3 data-identifier="habit-page-action">Hábitos</h3></Link>
             <Containercircular>
                 <CircularProgressbarWithChildren
                     value={percentual}
@@ -22,12 +22,15 @@ export default function Footer() {
                     <Link to="/today"><h3>Hoje</h3></Link>
                 </CircularProgressbarWithChildren>
             </Containercircular>
-            <Link to="/historic"><h3>Histórico</h3></Link>
+            <Link to="/historic"><h3 data-identifier="historic-page-action">Histórico</h3></Link>
         </FooterHabits>
     )
 }
 
 const FooterHabits = styled.div`
+*{
+    text-decoration: none;
+}
 width: 375px;
 height: 70px;
 display: flex;

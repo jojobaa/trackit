@@ -130,11 +130,13 @@ export default function Habits() {
                 <Header />
                 <AddHabits>
                     <h2>Meus hábitos</h2>
-                    <button onClick={() => setCriarHabito(!criarHabito)}>+</button>
+                    <button data-identifier="create-habit-btn" onClick={() => setCriarHabito(!criarHabito)}>+</button>
                 </AddHabits>
                 <form onSubmit={dadosHabito}>
                     <HabitAdded display={criarHabito ? "block" : "none"}>
-                        <Input type={"text"}
+                        <Input
+                            data-identifier="input-habit-name"
+                            type={"text"}
                             placeholder={"nome do hábito"}
                             disabled={carregando}
                             value={nomeHabito}
@@ -143,6 +145,7 @@ export default function Habits() {
                         <ContainerWeek>
                             {arrayDia.map((day) => (
                                 <Week
+                                    data-identifier="week-day-btn"
                                     onClick={() => {
                                         adiconaClicou(day);
                                     }}
@@ -155,6 +158,7 @@ export default function Habits() {
                         </ContainerWeek>
                         <Save>
                             <Cancelar
+                                data-identifier="cancel-habit-create-btn"
                                 onClick={esconderHabito}
                                 backgroundcolor="#FFFFFF"
                                 color="#52B6FF"
@@ -162,6 +166,7 @@ export default function Habits() {
                                 disabled={carregando}
                                 type="button">Cancelar</Cancelar>
                             <Salvar
+                                data-identifier="save-habit-create-btn"
                                 backgroundcolor="#52B6FF"
                                 color="#FFFFFF"
                                 disabled={carregando}>
@@ -170,13 +175,13 @@ export default function Habits() {
                         </Save>
                     </HabitAdded>
                 </form>
-                <p>{habito.length === 0 ? "Você não tem nenhum hábito cadastrado ainda. Adicione um hábito para começar a trackear!" :
+                <p data-identifier="no-habit-message">{habito.length === 0 ? "Você não tem nenhum hábito cadastrado ainda. Adicione um hábito para começar a trackear!" :
                     ""}</p>
                 {habito.map((habitos) => (
                     <ContainerHabito>
-                        <NomeHabito>
+                        <NomeHabito data-identifier="habit-name">
                             {habitos.name}
-                            <TrashCanIconStyle>
+                            <TrashCanIconStyle data-identifier="delete-habit-btn">
                                 <ion-icon name="trash-outline" onClick={() => excluirHabito(habitos.id)}></ion-icon>
                             </TrashCanIconStyle>
                         </NomeHabito>

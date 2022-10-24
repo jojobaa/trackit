@@ -78,26 +78,26 @@ export default function Today() {
         <ContainerToday>
             <Header />
             <Title>
-                <h1>{`${dayjs().locale("pt-br").format("dddd")}, ${dayjs().format(
+                <h1 data-identifier="today-infos">{`${dayjs().locale("pt-br").format("dddd")}, ${dayjs().format(
                     "DD/MM"
                 )}`}</h1>
-                <StyledSubtitle color={percentual !== 0 && habitoHoje.length > 0 ? "#8FC549" : "#BABABA"}>
+                <StyledSubtitle data-identifier="today-infos" color={percentual !== 0 && habitoHoje.length > 0 ? "#8FC549" : "#BABABA"}>
                     {percentual !== 0 && habitoHoje.length > 0 ? `${percentual}% dos hábitos concluídos` : "Nenhum hábito concluído ainda"}
                 </StyledSubtitle>
             </Title>
             <CardHabit>
                 {habitoHoje.map((habito) => (
-                    <ContainerHabito>
+                    <ContainerHabito data-identifier="today-infos">
                         <InfoHabitToday>
                             <h2>{habito.name}</h2>
-                            <StyleP>Sequência atual: <p color={habito.done ? "#8FC549" : "#666666"}>
-                                {habito.currentSequence} dia(s)</p>
+                            <StyleP>Sequência atual: <p color={habito.done ? "#8FC549" : "#666666"}> {habito.currentSequence} dia</p>
                             </StyleP>
                             <StyleP>Seu recorde: <p color={habito.done && habito.currentSequence === habito.highestSequence ? "#8FC549" : "#666666"}>
-                                {habito.highestSequence} dia(s)</p>
+                                {habito.highestSequence} dia</p>
                             </StyleP>
                         </InfoHabitToday>
                         <CheckHabitToday
+                            data-identifier="done-habit-btn"
                             onClick={() => checkHabito(habito)}
                             backgroundcolor={habito.done ? "#8FC549" : "#EBEBEB"}>
                             <ion-icon name="checkmark-outline"></ion-icon>
@@ -117,10 +117,21 @@ background-color: #F2F2F2;
 margin-top: 60px;
 `
 const ContainerHabito = styled.div`
-
+width: 340px;
+height: 94px;
+display: flex;
+align-items: center;
+justify-content: space-around;
+background-color: #FFFFFF;
+margin-bottom: 10px;
+border-radius: 5px;
 `
 const Title = styled.div`
-margin-left: 10px;
+display: flex;
+justify-content: center;
+flex-direction: column;
+margin-left:20px;
+margin-bottom: 20px;
 padding-top: 40px;
 h1{
     color: #126BA5;
@@ -138,11 +149,8 @@ const CardHabit = styled.div`
 display: flex;
 align-items: center;
 justify-content: space-around;
-width: 340px;
-height: 94px;
-background-color: #FFFFFF;
+flex-direction: column;
 margin-top: 10px;
-margin-left: 15px;
 `
 const InfoHabitToday = styled.div`
 background-color: #FFFFFF;
@@ -170,14 +178,11 @@ background-color: ${(props) => props.backgroundcolor};
 `
 const StyleP = styled.div`
 display: flex;
-p{
-  background-color: ${(props) => props.backgroundcolor};
-  font-family: "Lexend Deca";
-  font-size: 13px;
-  font-weight: 400;
-  line-height: 16px;
-  margin-left:4px;
-  color: ${(props) => props.color};
-}
-
+background-color: ${(props) => props.backgroundcolor};
+font-family: "Lexend Deca";
+font-size: 13px;
+font-weight: 400;
+line-height: 16px;
+margin-left:4px;
+color: ${(props) => props.color};
 `;
