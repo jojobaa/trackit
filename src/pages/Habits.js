@@ -1,10 +1,12 @@
 // import { Link } from "react-router-dom";
-import { useContext, useState, useDays } from "react";
+import { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
 import Footer from "../components/Footer"
 import Header from "../components/Header";
 import ContextAPI from "./ContextAPI";
 import axios from "axios";
+import useDays from "../components/ObjectDay"
+import carregar from "../img/carregar.svg"
 
 export default function Habits() {
     const [carregando, setCarregando] = useState(false);
@@ -12,6 +14,7 @@ export default function Habits() {
     const [criarHabito, setCriarHabito] = useState(false);
     const [nomeHabito, setNomeHabito] = useState("");
     const { usuario } = useContext(ContextAPI);
+    const [habito, setHabito] = useState([]);
 
     function clicou(day) {
         dia[day].isClicked = true;
@@ -25,9 +28,9 @@ export default function Habits() {
 
     function adiconaClicou(day) {
         if (dia[day].isClicked === false) {
-            adiciona(day);
+            clicou(day);
         } else {
-            remove(day);
+            desclicou(day);
         }
     }
 
@@ -38,7 +41,7 @@ export default function Habits() {
         const escolherDia = arrayDia.filter((day) => dia[day].isClicked === true);
 
         const diaId = [];
-        console.log(diaId);
+        // console.log(diaId);
 
         for (let i = 0; i < escolherDia.length; i++) {
             diaId.push(dia[escolherDia[i]].id);
@@ -55,7 +58,7 @@ export default function Habits() {
                 headers: { Authorization: "Bearer " + usuario.token }
             }
         );
-        promise.then((answer, dia) => {
+        promise.then(() => {
             setCarregando(false);
             setCriarHabito(false);
             setNomeHabito("")
@@ -70,6 +73,37 @@ export default function Habits() {
 
     function esconderHabito() {
         setCriarHabito(false);
+    }
+
+    useEffect(() => {
+        const promise2 = axios.get(
+            "https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits",
+            {
+                headers: { Authorization: "Bearer " + usuario.token },
+            }
+        );
+
+        promise2.then((answer) => {
+            setHabito(answer.data);
+        });
+    });
+
+    useEffect(() => {
+        const promise3 = axios.delete(
+            `https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/{${habito.id}}`,
+            {
+                headers: { Authorization: "Bearer " + usuario.token },
+            }
+        );
+
+    }, []);
+
+    function excluirHabito() {
+
+        const infoExcluir = "Você realmente gostaria de apagar o hábito?";
+        if (window.confirm(infoExcluir) === true) {
+
+        }
     }
 
     return (
@@ -87,24 +121,50 @@ export default function Habits() {
                         value={nomeHabito}
                         onChange={(e) => setNomeHabito(e.target.value)}
                     ></input>
-                    {arrayDia.map((day) => (
+                    {arrayDia.map((dia) => (
                         <Week
                             onClick={() => {
-                                clicou(dia);
+                                adiconaClicou(dia);
                             }}
                             disabled={carregando}
-                            color={dia[day].isClicked ? "#ffffff" : "#d4d4d4"}
-                            backgroundcolor={dia[day].isClicked ? "#d4d4d4" : "#ffffff"}
+                            color={dia[dia].isClicked ? "#ffffff" : "#d4d4d4"}
+                            backgroundcolor={dia[dia].isClicked ? "#d4d4d4" : "#ffffff"}
                             type="button">
-                            {dia[day].name}
+                            {dia[dia].name}
                         </Week>))}
                     <Save>
-                        <div>Cancelar</div>
-                        <button>Salvar</button>
+                        <div
+                            onClick={esconderHabito}
+                            backgroundcolor="#FFFFFF"
+                            color="#52B6FF"
+                            marginright="17px"
+                            disabled={carregando}
+                            type="button">Cancelar</div>
+                        <button
+                            backgroundcolor="#52B6FF"
+                            color="#FFFFFF"
+                            disabled={carregando}>
+                            {carregando ? <img src={carregar} alt="" /> : "Salvar"}
+                        </button>
                     </Save>
                 </HabitAdded>
             </form>
-            <p>Você não tem nenhum hábito cadastrado ainda. Adicione um hábito para começar a trackear!</p>
+            <p>"Você não tem nenhum hábito cadastrado ainda. Adicione um hábito para começar a trackear!"</p>
+            {habito.map((habitos) => (
+                <ContainerHabito>
+                    <NomeHabito>
+                        {habitos.name}
+                        <TrashCanIconStyle>
+                            <ion-icon name="trash-outline" onClick={excluirHabito}></ion-icon>
+                        </TrashCanIconStyle>
+                    </NomeHabito>
+                    <Dias>
+                        {arrayDia.map((day) => (
+                            <Dia>{dia[day].name}</Dia>
+                        ))}
+                    </Dias>
+                </ContainerHabito>
+            ))}
             <Footer />
         </Background>
     )
@@ -156,7 +216,7 @@ margin-left: 12px;
 width: 340px;
 height: 180px;
 background-color: #FFFFFF;
-/* display: none; */
+display: ${(props) => props.display};
 input{
    width: 303px;
    height: 45px;
@@ -182,7 +242,8 @@ div{
     height: 30px;
     border: 1px solid #D4D4D4;
     font-family: 'Lexend Deca', sans-serif;
-    color: #D4D4D4;
+    color:  ${(props) => props.color};
+    background-color: ${(props) => props.backgroundcolor};
     font-size: 18px;
     border-radius: 5px;
     margin-right: 5px;
@@ -205,9 +266,52 @@ button{
     height: 35px;
     font-family: 'Lexend Deca', sans-serif;
     font-size: 15px;
-    color: #FFFFFF;
-    background-color: #52B6FF;
+    color:  ${(props) => props.color};
+    background-color:  ${(props) => props.backgroundcolor};
     border: none;
     border-radius: 5px;
+    margin-right:  ${(props) => props.marginright};
 }
 `
+const ContainerHabito = styled.div`
+  width: 93vw;
+  height: 91px;
+  border-radius: 5px;
+  background-color: #ffffff;
+  margin: 20px auto auto auto;
+  padding-top: 18px;
+`;
+const NomeHabito = styled.div`
+  width: 83vw;
+  height: 45px;
+  margin: auto auto 6px auto;
+  font-family: "Lexend Deca";
+  font-weight: 400;
+  font-size: 19.98px;
+  line-height: 24.97px;
+  color: #666666;
+  display: flex;
+  justify-content: space-between;
+`;
+const Dias = styled.div`
+  width: 83vw;
+  margin: auto;
+  display: flex;
+  justify-content: space-between;
+`;
+const Dia = styled.div`
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: solid 1px #d4d4d4;
+  border-radius: 5px;
+  background-color: ${(props) => props.backgroundcolor};
+  color: #d4d4d4;
+  font-family: "Lexend Deca";
+  font-weight: 400;
+  font-size: 19.98px;
+  line-height: 24.87x;
+`;
+const TrashCanIconStyle = styled.div``;
